@@ -5,10 +5,10 @@
     "description": "REST API with Express and Firestore",
     "version": "1.0.0"
   },
-  "host": "localhost:5500",
+  "host": "restapi-vgif.onrender.com",
   "basePath": "/api",
   "schemes": [
-    "http"
+    "https"
   ],
   "paths": {
     "/items": {
@@ -84,13 +84,28 @@
         }
       },
       "put": {
+        "tags": [
+          "Items"
+        ],
+        "summary": "",
         "description": "",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "description": ""
+          },
+          {
+            "name": "data",
+            "in": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
           }
         ],
         "responses": {
@@ -103,13 +118,18 @@
         }
       },
       "delete": {
+        "tags": [
+          "Items"
+        ],
+        "summary": "",
         "description": "",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "description": ""
           }
         ],
         "responses": {
