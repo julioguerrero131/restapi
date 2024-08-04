@@ -45,6 +45,15 @@
         ],
         "summary": "Get all items entries",
         "description": "Get all items entries",
+        "parameters": [
+          {
+            "name": "token",
+            "description": "JWT Token",
+            "required": true,
+            "in": "query",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Items entries successfully obtained"
