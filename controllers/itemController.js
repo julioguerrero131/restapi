@@ -64,6 +64,7 @@ exports.getAllItems = async (req, res) => {
   const token = req.params.token;
 
   try {
+    const secret = "secret"; // Debe ser la misma clave utilizada al firmar el token
     const decoded = jwt.verify(token, secret);
     const itemsSnapshot = await db.collection("items").get();
     const items = [];
