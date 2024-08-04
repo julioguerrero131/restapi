@@ -37,6 +37,7 @@ exports.getAllItems = async (req, res) => {
      #swagger.description = 'Get all items entries'
      #swagger.summary = 'Get all items entries'
      #swagger.parameters['token'] = {
+         in: 'header'
          description: 'JWT Token',
          required: true,
      }
@@ -54,6 +55,7 @@ exports.getAllItems = async (req, res) => {
   }
 
   try {
+
     const decoded = jwt.verify(token, secret);
     console.log("Token valido:", decoded)
 
@@ -61,8 +63,17 @@ exports.getAllItems = async (req, res) => {
     const items = [];
     itemsSnapshot.forEach((doc) => items.push({ id: doc.id, ...doc.data() }));
     res.status(200).json(items);
+    
   } catch (error) {
-    res.status(400).send(error.message);
+
+    if (error.name === 'TokenExpiredError') {
+      // Token ha expirado
+      return res.status(408).send("El token ha expirado");
+    } else {
+      // Otro error
+      return res.status(400).send(error.message);
+    }
+
   }
 };
 
