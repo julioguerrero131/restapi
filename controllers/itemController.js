@@ -2,20 +2,7 @@ const admin = require("firebase-admin");
 const db = admin.firestore();
 const jwt = require("jsonwebtoken");
 
-async function validateToken(token) {
-  const secret = "secret"; // Debe ser la misma clave utilizada al firmar el token
-
-  try {
-    const decoded = jwt.verify(token, secret);
-    console.log("Token válido:", decoded);
-    // Aquí puedes proceder con la lógica de negocio si el token es válido
-    return true;
-  } catch (err) {
-    console.error("Token no válido:", err.message);
-    // Aquí manejas el caso de un token inválido, por ejemplo, rechazando la solicitud
-    return false;
-  }
-}
+const secret = "secret"; // Debe ser la misma clave utilizada al firmar el token
 
 exports.createItem = async (req, res) => {
   /* 
@@ -62,10 +49,14 @@ exports.getAllItems = async (req, res) => {
    */
 
   const token = req.params.token;
+  if (!token) {
+    return res.status(400).send("Token no proporcionado");
+  }
 
   try {
-    const secret = "secret"; // Debe ser la misma clave utilizada al firmar el token
     const decoded = jwt.verify(token, secret);
+    console.log("Token valido:", decoded)
+
     const itemsSnapshot = await db.collection("items").get();
     const items = [];
     itemsSnapshot.forEach((doc) => items.push({ id: doc.id, ...doc.data() }));
