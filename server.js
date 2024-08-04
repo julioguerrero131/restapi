@@ -20,8 +20,6 @@ app.use(bodyParser.json());
 
 const PORT = process.env.PORT || 5000;
 
-app.use("/api", require("./routes/api"));
-
 /* Ruta Base -> Documentación */
 app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 

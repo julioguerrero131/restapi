@@ -1,5 +1,21 @@
 const admin = require("firebase-admin");
 const db = admin.firestore();
+const jwt = require("jsonwebtoken");
+
+async function validateToken(token) {
+  const secret = "secret"; // Debe ser la misma clave utilizada al firmar el token
+
+  try {
+    const decoded = jwt.verify(token, secret);
+    console.log("Token válido:", decoded);
+    // Aquí puedes proceder con la lógica de negocio si el token es válido
+    return true;
+  } catch (err) {
+    console.error("Token no válido:", err.message);
+    // Aquí manejas el caso de un token inválido, por ejemplo, rechazando la solicitud
+    return false;
+  }
+}
 
 exports.createItem = async (req, res) => {
   /* 
@@ -33,6 +49,10 @@ exports.getAllItems = async (req, res) => {
      #swagger.tags = ['Items']
      #swagger.description = 'Get all items entries'
      #swagger.summary = 'Get all items entries'
+     #swagger.parameters['token'] = {
+         description: 'JWT Token',
+         required: true,
+     }
      #swagger.responses[200] = {
          description: 'Items entries successfully obtained',
      }
@@ -41,13 +61,16 @@ exports.getAllItems = async (req, res) => {
      }
    */
 
-  try {
-    const itemsSnapshot = await db.collection("items").get();
-    const items = [];
-    itemsSnapshot.forEach((doc) => items.push({ id: doc.id, ...doc.data() }));
-    res.status(200).json(items);
-  } catch (error) {
-    res.status(400).send(error.message);
+  const token = req.params.token;
+  if (validateToken(token)) {
+    try {
+      const itemsSnapshot = await db.collection("items").get();
+      const items = [];
+      itemsSnapshot.forEach((doc) => items.push({ id: doc.id, ...doc.data() }));
+      res.status(200).json(items);
+    } catch (error) {
+      res.status(400).send(error.message);
+    }
   }
 };
 
@@ -105,7 +128,6 @@ exports.updateItem = async (req, res) => {
       description: '',
     }
   */
-
 
   try {
     const itemId = req.params.id;
