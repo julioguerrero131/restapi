@@ -62,15 +62,15 @@ exports.getAllItems = async (req, res) => {
    */
 
   const token = req.params.token;
-  if (validateToken(token)) {
-    try {
-      const itemsSnapshot = await db.collection("items").get();
-      const items = [];
-      itemsSnapshot.forEach((doc) => items.push({ id: doc.id, ...doc.data() }));
-      res.status(200).json(items);
-    } catch (error) {
-      res.status(400).send(error.message);
-    }
+
+  try {
+    const decoded = jwt.verify(token, secret);
+    const itemsSnapshot = await db.collection("items").get();
+    const items = [];
+    itemsSnapshot.forEach((doc) => items.push({ id: doc.id, ...doc.data() }));
+    res.status(200).json(items);
+  } catch (error) {
+    res.status(400).send(error.message);
   }
 };
 
