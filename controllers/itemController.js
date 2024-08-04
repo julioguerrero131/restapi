@@ -37,7 +37,7 @@ exports.getAllItems = async (req, res) => {
      #swagger.description = 'Get all items entries'
      #swagger.summary = 'Get all items entries'
      #swagger.parameters['token'] = {
-         in: 'header'
+         in: 'header',
          description: 'JWT Token',
          required: true,
      }
@@ -63,7 +63,7 @@ exports.getAllItems = async (req, res) => {
     const items = [];
     itemsSnapshot.forEach((doc) => items.push({ id: doc.id, ...doc.data() }));
     res.status(200).json(items);
-    
+
   } catch (error) {
 
     if (error.name === 'TokenExpiredError') {

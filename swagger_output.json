@@ -48,9 +48,9 @@
         "parameters": [
           {
             "name": "token",
+            "in": "header",
             "description": "JWT Token",
             "required": true,
-            "in": "query",
             "type": "string"
           }
         ],
@@ -60,6 +60,9 @@
           },
           "400": {
             "description": "Bad request"
+          },
+          "408": {
+            "description": "Request Timeout"
           }
         }
       }
