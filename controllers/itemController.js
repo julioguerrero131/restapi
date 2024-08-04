@@ -49,7 +49,7 @@ exports.getAllItems = async (req, res) => {
      }
    */
 
-  const token = req.params.token;
+  const token = req.headers['token'];
   if (!token) {
     return res.status(400).send("Token no proporcionado");
   }
